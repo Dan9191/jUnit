@@ -1,22 +1,37 @@
-.DS_Store
-.idea/*
-**/.gradle/
-**/target/
-project/build.properties
-conf/application-local.conf
-**/build/
-**/logs/
-**/out/
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
 *.iml
 *.ipr
-*.iws
-.ideaDataSources/*
-/src/main/resources/git.properties
-/src/main/resources/application-dev.properties
-/schemas/
-/tmp/schemas/
-/build/
-/.idea/
-/.gradle/
-/gradle/
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
