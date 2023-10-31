@@ -16,10 +16,14 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -150,5 +154,29 @@ public class UserServiceTest {
 
             assertTrue(maybeUser.isEmpty());
         }
+
+        @ParameterizedTest(name = "{arguments} test")
+        //@ArgumentsSource()
+        //@NullSource
+        //@EmptySource
+        //@NullAndEmptySource
+        //@ValueSource(strings = {"Ivan", "Petr"}) - применимо, если используется один параметр в методе
+        @MethodSource("com.dan.junit.service.UserServiceTest#getArgumentsForLoginTest")
+        //@CsvFileSource(resources = "/login-test-data.csv", delimiter = ',', numLinesToSkip = 1) - применимо, если используется простые типы
+        void loginParametrizedTest(String username, String password, Optional<User> user) {
+            userService.add(IVAN, PETR);
+
+            Optional<User> maybeUser = userService.login(username, password);
+            assertThat(maybeUser).isEqualTo(maybeUser);
+        }
+    }
+
+    static Stream<Arguments> getArgumentsForLoginTest() {
+        return Stream.of(
+                Arguments.of("Ivan", "123", Optional.of(IVAN)),
+                Arguments.of("Petr", "111", Optional.of(PETR)),
+                Arguments.of("Petr", "dummy", Optional.empty()),
+                Arguments.of("dummy", "123", Optional.empty())
+        );
     }
 }
