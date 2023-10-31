@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.dan.junit.service.UserServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-10-31T02:39:39" hostname="dan-B560-AORUS-PRO-AX" time="0.031">
+<testsuite name="com.dan.junit.service.UserServiceTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2023-10-31T02:59:39" hostname="dan-B560-AORUS-PRO-AX" time="0.05">
   <properties/>
-  <testcase name="throwExceptionIfUsernameOrPasswordIsNull()" classname="com.dan.junit.service.UserServiceTest" time="0.031"/>
+  <testcase name="loginSuccessIfUserExists()" classname="com.dan.junit.service.UserServiceTest" time="0.032"/>
+  <testcase name="usersConvertedToMapById()" classname="com.dan.junit.service.UserServiceTest" time="0.006"/>
+  <testcase name="loginFailIfPasswordNotCorrect()" classname="com.dan.junit.service.UserServiceTest" time="0.001"/>
+  <testcase name="usersEmptyIfNoUserAdded()" classname="com.dan.junit.service.UserServiceTest" time="0.0"/>
+  <testcase name="throwExceptionIfUsernameOrPasswordIsNull()" classname="com.dan.junit.service.UserServiceTest" time="0.003"/>
+  <testcase name="userSizeIfUserAdded()" classname="com.dan.junit.service.UserServiceTest" time="0.004"/>
+  <testcase name="loginFailIfUserDoesNotExist()" classname="com.dan.junit.service.UserServiceTest" time="0.0"/>
   <system-out><![CDATA[Before all:
-Before each:com.dan.junit.service.UserServiceTest@16eb3ea3
-After each:com.dan.junit.service.UserServiceTest@16eb3ea3
+Before each:com.dan.junit.service.UserServiceTest@4c60d6e9
+After each:com.dan.junit.service.UserServiceTest@4c60d6e9
+Before each:com.dan.junit.service.UserServiceTest@4c60d6e9
+After each:com.dan.junit.service.UserServiceTest@4c60d6e9
+Before each:com.dan.junit.service.UserServiceTest@4c60d6e9
+After each:com.dan.junit.service.UserServiceTest@4c60d6e9
+Before each:com.dan.junit.service.UserServiceTest@4c60d6e9
+test1:com.dan.junit.service.UserServiceTest@4c60d6e9
+After each:com.dan.junit.service.UserServiceTest@4c60d6e9
+Before each:com.dan.junit.service.UserServiceTest@4c60d6e9
+After each:com.dan.junit.service.UserServiceTest@4c60d6e9
+Before each:com.dan.junit.service.UserServiceTest@4c60d6e9
+test2:com.dan.junit.service.UserServiceTest@4c60d6e9
+After each:com.dan.junit.service.UserServiceTest@4c60d6e9
+Before each:com.dan.junit.service.UserServiceTest@4c60d6e9
+After each:com.dan.junit.service.UserServiceTest@4c60d6e9
 AfterAll: 
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>

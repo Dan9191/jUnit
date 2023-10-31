@@ -16,3 +16,7 @@ conf/application-local.conf
 /src/main/resources/application-dev.properties
 /schemas/
 /tmp/schemas/
+/build/
+/.idea/
+/.gradle/
+/gradle/
