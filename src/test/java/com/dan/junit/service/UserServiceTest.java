@@ -5,9 +5,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("user")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+//@TestMethodOrder(MethodOrderer.MethodName.class)
+//@TestMethodOrder(MethodOrderer.DisplayName.class)
 public class UserServiceTest {
 
     private static final User PETR = User.of(2, "Petr", "111");
@@ -38,6 +45,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @Order(1)
     void usersEmptyIfNoUserAdded() {
         System.out.println("test1:" + this);
         List<User> users = userService.getAll();
@@ -56,6 +64,9 @@ public class UserServiceTest {
     }
 
     @Test
+    @Order(2)
+    // default DisplayName - method name
+    @DisplayName("login success")
     void loginSuccessIfUserExists() {
         userService.add(IVAN);
         Optional<User> maybeUser = userService.login(IVAN.getName(), IVAN.getPassword());
@@ -86,6 +97,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @Order(3)
     void loginFailIfPasswordNotCorrect() {
         userService.add(IVAN);
         Optional<User> maybeUser = userService.login(IVAN.getName(), "dadad");
