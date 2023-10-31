@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.dan.junit.service.UserServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-10-31T02:39:39" hostname="dan-B560-AORUS-PRO-AX" time="0.031">
+  <properties/>
+  <testcase name="throwExceptionIfUsernameOrPasswordIsNull()" classname="com.dan.junit.service.UserServiceTest" time="0.031"/>
+  <system-out><![CDATA[Before all:
+Before each:com.dan.junit.service.UserServiceTest@16eb3ea3
+After each:com.dan.junit.service.UserServiceTest@16eb3ea3
+AfterAll: 
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
