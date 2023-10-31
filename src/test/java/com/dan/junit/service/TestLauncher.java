@@ -3,6 +3,7 @@ package com.dan.junit.service;
 import org.junit.platform.engine.discovery.DiscoverySelectors;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.TagFilter;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
@@ -17,6 +18,10 @@ public class TestLauncher {
                 .request()
                 //.selectors(DiscoverySelectors.selectClass(UserServiceTest.class))
                 .selectors(DiscoverySelectors.selectPackage("com.dan.junit.service"))
+                .filters(
+                        TagFilter.includeTags("user"),
+                        TagFilter.excludeTags("test1")
+                )
                 .build();
 
         launcher.execute(request, listener);
