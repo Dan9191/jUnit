@@ -1,6 +1,7 @@
 package com.dan.junit.service;
 
 import com.dan.junit.dto.User;
+import com.dan.junit.paramresolver.UserServiceParamResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,8 +12,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 import java.util.Map;
@@ -28,11 +31,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@TestMethodOrder(MethodOrderer.MethodName.class)
 //@TestMethodOrder(MethodOrderer.DisplayName.class)
+@ExtendWith({
+        UserServiceParamResolver.class
+})
 public class UserServiceTest {
 
     private static final User PETR = User.of(2, "Petr", "111");
     private static final User IVAN = User.of(1, "Ivan", "123");
     private  UserService userService;
+
+    UserServiceTest(TestInfo testInfo) {
+        System.out.println();
+    }
 
     @BeforeAll
     static void init(){
@@ -40,9 +50,9 @@ public class UserServiceTest {
     }
 
     @BeforeEach
-    void prepare() {
+    void prepare(UserService userService) {
         System.out.println("Before each:" + this);
-        userService = new UserService();
+        this.userService = userService;
     }
 
     @Test
