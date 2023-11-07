@@ -6,10 +6,12 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -20,6 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +31,8 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("user")
@@ -69,6 +74,7 @@ public class UserServiceTest {
 
     @Tag("test1")
     @Test
+    @Disabled  // used to disable the test
     void userSizeIfUserAdded() {
         System.out.println("test2:" + this);
 
@@ -80,7 +86,9 @@ public class UserServiceTest {
 
 
 
-    @Test
+    //@Test
+    // RepeatedTest used to check flaky tests
+    @RepeatedTest(value = 5, name = RepeatedTest.LONG_DISPLAY_NAME) // number of repetitions for the test
     void usersConvertedToMapById() {
         userService.add(IVAN, PETR);
 
@@ -90,6 +98,27 @@ public class UserServiceTest {
                 () -> assertThat(userMap).containsKeys(IVAN.getId(), PETR.getId()),
                 () -> assertThat(userMap).containsValues(IVAN, PETR)
         );
+    }
+
+    // assertTimeout used to check test execution time
+    @Test
+    // @Timeout(value = 200, unit = TimeUnit.MILLISECONDS) can be used to check test execution time
+    void checkLoginFunctionalityPerformance() {
+        var result = assertTimeout(Duration.ofMillis(200L), () -> {
+            Thread.sleep(300L);
+            return userService.login("dummy", IVAN.getPassword());
+        });
+    }
+
+    // assertTimeoutPreemptively used to check test in separate thread
+    @Test
+    void checkLoginFunctionalityPerformanceWithSeparateThread() {
+        System.out.println(Thread.currentThread().getName());
+        var result = assertTimeoutPreemptively(Duration.ofMillis(200L), () -> {
+            System.out.println(Thread.currentThread().getName());
+            Thread.sleep(150L);
+            return userService.login("dummy", IVAN.getPassword());
+        });
     }
 
     @AfterEach
