@@ -1,4 +1,4 @@
-package com.dan.junit.paramresolver;
+package com.dan.junit.extension;
 
 import com.dan.junit.service.UserService;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -6,6 +6,9 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
+/**
+ * Одна из разновидностей Extension модели
+ */
 public class UserServiceParamResolver implements ParameterResolver {
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {

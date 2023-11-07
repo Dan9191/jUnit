@@ -1,7 +1,11 @@
 package com.dan.junit.service;
 
 import com.dan.junit.dto.User;
-import com.dan.junit.paramresolver.UserServiceParamResolver;
+import com.dan.junit.extension.ConditionalExtension;
+import com.dan.junit.extension.GlobalExtension;
+import com.dan.junit.extension.PostProcessingExtension;
+import com.dan.junit.extension.ThrowableExtension;
+import com.dan.junit.extension.UserServiceParamResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,6 +26,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -41,9 +46,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 //@TestMethodOrder(MethodOrderer.MethodName.class)
 //@TestMethodOrder(MethodOrderer.DisplayName.class)
 @ExtendWith({
-        UserServiceParamResolver.class
+        UserServiceParamResolver.class,
+        PostProcessingExtension.class,
+        ConditionalExtension.class,
+        ThrowableExtension.class
+        // GlobalExtension.class             // we included custom extension, but now we extend TestBase
 })
-public class UserServiceTest {
+public class UserServiceTest extends TestBase {
 
     private static final User PETR = User.of(2, "Petr", "111");
     private static final User IVAN = User.of(1, "Ivan", "123");
@@ -66,7 +75,10 @@ public class UserServiceTest {
 
     @Test
     @Order(1)
-    void usersEmptyIfNoUserAdded() {
+    void usersEmptyIfNoUserAdded() throws IOException {
+        if (true) {
+            throw new RuntimeException("Custom exception for check throwable extension");
+        }
         System.out.println("test1:" + this);
         List<User> users = userService.getAll();
         assertTrue(users.isEmpty());
@@ -105,7 +117,7 @@ public class UserServiceTest {
     // @Timeout(value = 200, unit = TimeUnit.MILLISECONDS) can be used to check test execution time
     void checkLoginFunctionalityPerformance() {
         var result = assertTimeout(Duration.ofMillis(200L), () -> {
-            Thread.sleep(300L);
+            Thread.sleep(150L);
             return userService.login("dummy", IVAN.getPassword());
         });
     }
