@@ -1,5 +1,6 @@
 package com.dan.junit.extension;
 
+import com.dan.junit.dao.UserDao;
 import com.dan.junit.service.UserService;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -17,6 +18,6 @@ public class UserServiceParamResolver implements ParameterResolver {
 
     @Override
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return new UserService();
+        return new UserService(new UserDao());
     }
 }

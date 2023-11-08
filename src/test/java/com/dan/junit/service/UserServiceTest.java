@@ -1,5 +1,6 @@
 package com.dan.junit.service;
 
+import com.dan.junit.dao.UserDao;
 import com.dan.junit.dto.User;
 import com.dan.junit.extension.ConditionalExtension;
 import com.dan.junit.extension.GlobalExtension;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -49,14 +51,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         UserServiceParamResolver.class,
         PostProcessingExtension.class,
         ConditionalExtension.class,
-        ThrowableExtension.class
+        ThrowableExtension.class // blocking all exceptions
         // GlobalExtension.class             // we included custom extension, but now we extend TestBase
 })
 public class UserServiceTest extends TestBase {
 
     private static final User PETR = User.of(2, "Petr", "111");
     private static final User IVAN = User.of(1, "Ivan", "123");
-    private  UserService userService;
+    private UserService userService;
+    private UserDao userDao;
 
     UserServiceTest(TestInfo testInfo) {
         System.out.println();
@@ -70,7 +73,24 @@ public class UserServiceTest extends TestBase {
     @BeforeEach
     void prepare(UserService userService) {
         System.out.println("Before each:" + this);
-        this.userService = userService;
+        this.userDao = Mockito.mock(UserDao.class);
+        this.userService = new UserService(userDao);
+    }
+
+    @Test
+    void shouldDeleteExistedUSer() {
+        userService.add(IVAN);
+        //Mockito.doReturn(true).when(userDao).delete(IVAN.getId()); // this is stub
+        // Mockito.doReturn(true).when(userDao).delete(Mockito.any()); // this is dummy
+
+       // Mockito.when(userDao.delete(IVAN.getId()))
+        // .thenReturn(true)
+        // .thenReturn(false); // second variant
+        //System.out.println(userService.delete(IVAN.getId())); //true
+       // System.out.println(userService.delete(IVAN.getId())); //false
+
+        boolean deleteResult = userService.delete(IVAN.getId());
+        assertThat(deleteResult).isTrue();
     }
 
     @Test
@@ -95,8 +115,6 @@ public class UserServiceTest extends TestBase {
         List<User> users = userService.getAll();
         assertThat(users).hasSize(2);
     }
-
-
 
     //@Test
     // RepeatedTest used to check flaky tests

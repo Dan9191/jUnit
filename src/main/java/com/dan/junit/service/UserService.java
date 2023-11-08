@@ -1,5 +1,6 @@
 package com.dan.junit.service;
 
+import com.dan.junit.dao.UserDao;
 import com.dan.junit.dto.User;
 
 import java.util.ArrayList;
@@ -11,7 +12,18 @@ import java.util.stream.Collectors;
 
 public class UserService {
 
+    private final UserDao userDao;
+
     private final List<User> users = new ArrayList<>();
+
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public boolean delete(Integer userId) {
+        return userDao.delete(userId);
+    }
+
     public List<User> getAll() {
         return users;
     }
