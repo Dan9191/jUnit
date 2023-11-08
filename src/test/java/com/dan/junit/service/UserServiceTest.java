@@ -26,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -51,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         UserServiceParamResolver.class,
         PostProcessingExtension.class,
         ConditionalExtension.class,
-        ThrowableExtension.class // blocking all exceptions
+     //   ThrowableExtension.class // blocking all exceptions
         // GlobalExtension.class             // we included custom extension, but now we extend TestBase
 })
 public class UserServiceTest extends TestBase {
@@ -69,27 +70,42 @@ public class UserServiceTest extends TestBase {
     static void init(){
         System.out.println("Before all:");
     }
+//
+//    @BeforeEach
+//    void prepare(UserService userService) {
+//        System.out.println("Before each:" + this);
+//        this.userDao = Mockito.mock(UserDao.class);
+//        this.userService = new UserService(userDao);
+//    }
+
 
     @BeforeEach
     void prepare(UserService userService) {
         System.out.println("Before each:" + this);
-        this.userDao = Mockito.mock(UserDao.class);
+        this.userDao = Mockito.spy(UserDao.class);
         this.userService = new UserService(userDao);
     }
 
     @Test
     void shouldDeleteExistedUSer() {
         userService.add(IVAN);
-        //Mockito.doReturn(true).when(userDao).delete(IVAN.getId()); // this is stub
+        Mockito.doReturn(true).when(userDao).delete(IVAN.getId()); // this is stub
         // Mockito.doReturn(true).when(userDao).delete(Mockito.any()); // this is dummy
 
        // Mockito.when(userDao.delete(IVAN.getId()))
         // .thenReturn(true)
-        // .thenReturn(false); // second variant
+        // .thenReturn(false); // second variant, unusable for spy mocks
         //System.out.println(userService.delete(IVAN.getId())); //true
        // System.out.println(userService.delete(IVAN.getId())); //false
 
         boolean deleteResult = userService.delete(IVAN.getId());
+        System.out.println(userService.delete(IVAN.getId()));
+        var argumentCaptor = ArgumentCaptor.forClass(Integer.class); // знвчение аргумента, с которым был вызван метод реального класса
+        Mockito.verify(userDao, Mockito.atLeast(2)).delete(argumentCaptor.capture());  // checks the number of calls
+
+
+       // assertThat(argumentCaptor.getValue()).isEqualTo(2); //false
+        assertThat(argumentCaptor.getValue()).isEqualTo(1); //true
         assertThat(deleteResult).isTrue();
     }
 
